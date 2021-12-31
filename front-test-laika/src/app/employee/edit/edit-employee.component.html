@@ -1,0 +1,85 @@
+<div class="container">
+
+  <div class="d-flex justify-content-between">
+    <h4>Edit person</h4>
+    <a href="#" routerLink="/person/index" class="btn btn-primaryt">Back</a>
+  </div>
+
+  <hr>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+
+    <div class="form-group row">
+      <div class="col-md-6 ">
+        <label for="name">Name:</label>
+        <input
+          formControlName="name"
+          [(ngModel)]="person.name"
+          id="name"
+          type="text"
+          class="form-control">
+        <div *ngIf="f.name.touched && f.name.invalid" class="alert alert-danger">
+          <div *ngIf="f.name.errors.required">*Name is required.</div>
+          <div *ngIf="f.name.errors.pattern">*The name must only contain letters.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-md-6 ">
+        <label for="tel">Telefono:</label>
+        <input
+          formControlName="tel"
+          [(ngModel)]="person.tel"
+          id="tel"
+          type="text"
+          class="form-control">
+        <div *ngIf="f.tel.touched && f.tel.invalid" class="alert alert-danger">
+          <div *ngIf="f.tel.errors.required">*Phone is required.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-md-6 ">
+        <label for="n_document">Numero de documento:</label>
+        <input
+          formControlName="n_document"
+          [(ngModel)]="person.n_document"
+          id="n_document"
+          type="text"
+          class="form-control">
+        <div *ngIf="f.n_document.touched && f.n_document.invalid" class="alert alert-danger">
+          <div *ngIf="f.n_document.errors.required">*N. document is required.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-md-6 ">
+        <label for="position_id">Cargo:</label>
+        <select formControlName="position_id" id="position_id" class="browser-default custom-select">
+          <option *ngFor="let cargo of cargos" value="{{ cargo.id }}">{{ cargo.name }}</option>
+        </select>
+        <div *ngIf="f.n_document.touched && f.n_document.invalid" class="alert alert-danger">
+          <div *ngIf="f.n_document.errors.required">*N. document is required.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-md-6 ">
+        <label for="document_type_id">Tipo de documento:</label>
+        <select formControlName="document_type_id" id="document_type_id" class="browser-default custom-select">
+          <option *ngFor="let tipo_documento of tipo_documentos" value="{{ tipo_documento.id }}">{{ tipo_documento.name }}</option>
+        </select>
+        <div *ngIf="f.n_document.touched && f.n_document.invalid" class="alert alert-danger">
+          <div *ngIf="f.n_document.errors.required">*N. document is required.</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Update</button>
+  </form>
+</div>

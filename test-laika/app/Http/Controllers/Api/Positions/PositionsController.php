@@ -1,0 +1,134 @@
+<?php
+
+namespace App\Http\Controllers\Api\Positions;
+
+use App\Http\Controllers\Controller;
+use App\Models\Positions;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class PositionsController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index($id = null)
+    {
+        //Get data to type document
+        $data = Positions::withoutTrashed()
+            ->select(
+                "id",
+                "name",
+            DB::raw("CASE WHEN status = 1 THEN 'Activo' ELSE 'Inactivo' END AS status")
+            );
+
+        if(!is_null($id)){
+            $data = $data->where("id", "=", $id);
+        }
+
+        return response()->json([
+            "data" => $data->get()
+        ], 200);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(Request $request)
+    {
+        //Save news records
+        try {
+            DB::beginTransaction();
+
+            foreach ($request->all() as $data) {
+
+                $type_document = new Positions();
+
+                $type_document->name = $data["name"];
+                $type_document->status = $data["status"];
+                $type_document->save();
+
+            }
+
+            DB::commit();
+
+            return response()->json([
+                "message" => "Cargos agregados con éxito"
+            ], 200);
+
+        }catch (\Exception $exception) {
+
+            DB::rollBack();
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Positions  $positions
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, $id)
+    {
+        //Update news records
+        try {
+            DB::beginTransaction();
+
+            foreach ($request->all() as $data) {
+
+                $type_document = Positions::find($id);
+
+                $type_document->name = $data["name"];
+                $type_document->status = $data["status"];
+                $type_document->update();
+
+            }
+
+            DB::commit();
+
+            return response()->json([
+                "message" => "Cargo actualizado con éxito"
+            ], 200);
+
+        }catch (\Exception $exception) {
+
+            DB::rollBack();
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy($id)
+    {
+        //delete records
+        $type_document = Positions::find($id);
+
+        if(!is_null($type_document)){
+            $type_document->delete();
+
+            return response()->json([
+                "message" => "Se elimino el registro exitosamente"
+            ], 200);
+        }else{
+            return response()->json([
+                "message" => "El cargo no existe en la base de datos"
+            ], 400);
+        }
+    }
+}

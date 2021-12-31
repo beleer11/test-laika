@@ -1,0 +1,27 @@
+<section>
+
+  <div class="d-flex justify-content-between">
+    <h4>Listado de tipos de documentos</h4>
+    <a routerLink="/employee/index" class="btn btn-danger">Regresar</a>
+    <a routerLink="/type_document/create" class="btn btn-success">Crear nuevo tipo documento</a>
+  </div>
+
+  <br>
+
+  <table class="table ">
+    <tr>
+      <th>Nombre</th>
+      <th>Estado</th>
+      <th width="220px">Action</th>
+    </tr>
+    <tr *ngFor="let typeDocument of typeDocuments">
+      <td>{{ typeDocument.name }}</td>
+      <td>{{ typeDocument.status }}</td>
+      <td>
+        <a href="#" [routerLink]="['/type_document/', 'edit', typeDocument.id  ]" class="btn btn-primary">Edit</a>
+        <button type="button" (click)="deletePosition(typeDocument.id)" class="btn btn-danger">Delete</button>
+      </td>
+    </tr>
+  </table>
+</section>
+

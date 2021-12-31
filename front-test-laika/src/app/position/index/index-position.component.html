@@ -1,0 +1,27 @@
+<section>
+
+  <div class="d-flex justify-content-between">
+    <h4>Listado de cargos</h4>
+    <a routerLink="/employee/index" class="btn btn-danger">Regresar</a>
+    <a routerLink="/position/create" class="btn btn-success">Crear nuevo cargo</a>
+  </div>
+
+  <br>
+
+  <table class="table ">
+    <tr>
+      <th>Nombre</th>
+      <th>Estado</th>
+      <th width="220px">Action</th>
+    </tr>
+    <tr *ngFor="let position of positions">
+      <td>{{ position.name }}</td>
+      <td>{{ position.status }}</td>
+      <td>
+        <a href="#" [routerLink]="['/position/', 'edit', position.id  ]" class="btn btn-primary">Edit</a>
+        <button type="button" (click)="deletePosition(position.id)" class="btn btn-danger">Delete</button>
+      </td>
+    </tr>
+  </table>
+</section>
+
